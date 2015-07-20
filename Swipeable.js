@@ -1,8 +1,8 @@
 var Swipeable = function () {
-    var startX = undefined,
-        delta = undefined,
-        timeout = undefined,
-        marginLeft = 0;
+    var startX = 0,
+        delta = 0,
+        marginLeft = 0,
+        timeout = null;
 
     function Swipeable () {}
 
@@ -60,6 +60,11 @@ var Swipeable = function () {
     };
 
     Swipeable.prototype.init = function () {
+        // defining these methods to save content and to store links to be able remove event listeners in future
+        this.onMouseUp = this._onMouseUp.bind(this);
+        this.onMouseMove = this._onMouseMove.bind(this);
+        this.onMouseDown = this._onMouseDown.bind(this);
+
         this.el.addEventListener('mousedown', this.onMouseDown);
     };
 

@@ -1,4 +1,5 @@
 var Carusel = function () {
+    // Carusel extends Swipeable
     extend(Carusel, Swipeable);
 
     function Carusel (options) {
@@ -7,11 +8,8 @@ var Carusel = function () {
         this.animationDuration = options.animationDuration || 0;
         this.animationDelay = options.animationDelay || 0;
 
+        // Photo wrap width + 10 * 2 (margins)
         this.swipeStep = this.el.querySelector('.carusel-item').offsetWidth + 20;
-
-        this.onMouseUp = this._onMouseUp.bind(this);
-        this.onMouseMove = this._onMouseMove.bind(this);
-        this.onMouseDown = this._onMouseDown.bind(this);
 
         this.init();
     }
