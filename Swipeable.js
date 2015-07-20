@@ -27,8 +27,9 @@ var Swipeable = function () {
     };
 
     Swipeable.prototype._onMouseUp = function () {
+        this._setTransition(this.animationDelay, this.animationDuration);
+
         if (Math.abs(delta) > this.swipeStep / 2) {
-            this._setTransition(this.animationDelay, this.animationDuration);
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
         }
 
