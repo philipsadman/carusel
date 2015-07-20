@@ -1,58 +1,67 @@
-function Swipeable () {}
+var Swipeable = function () {
+    var startX = undefined,
+        delta = undefined,
+        timeout = undefined,
+        marginLeft = 0;
 
-Swipeable.prototype.setPosition = function (val) {
-    this.el.style.marginLeft = val + 'px';
-}
+    function Swipeable () {}
 
-Swipeable.prototype._setTransition = function (delay, duration) {
-    this.el.style.webkitTransitionDelay = delay + 'ms';
-    this.el.style.webkitTransitionDuration = duration + 'ms';
-};
-
-Swipeable.prototype._onMouseMove = function (e) {
-    this.delta = e.clientX - this.startX;
-
-    if (Math.abs(this.delta) < this.swipeStep) {
-        this.setPosition(this.marginLeft + this.delta);
-    }
-    else {
-        this.onMouseUp();
-    }
-};
-
-Swipeable.prototype._onMouseUp = function () {
-    if (Math.abs(this.delta) > this.swipeStep / 3) {
-        this._setTransition(this.animationDelay, this.animationDuration);
-        this.marginLeft += this.delta > 0 ? this.swipeStep : -this.swipeStep;
+    Swipeable.prototype.setPosition = function (val) {
+        this.el.style.marginLeft = val + 'px';
     }
 
-    if (this.marginLeft > 0) {
-        this.marginLeft = 0;
-    }
-    else if (this.marginLeft <= -this.el.offsetWidth) {
-        this.marginLeft = -this.el.offsetWidth + this.swipeStep;
-    }
+    Swipeable.prototype._setTransition = function (delay, duration) {
+        this.el.style.webkitTransitionDelay = delay + 'ms';
+        this.el.style.webkitTransitionDuration = duration + 'ms';
+    };
 
-    this.setPosition(this.marginLeft);
+    Swipeable.prototype._onMouseMove = function (e) {
+        delta = e.clientX - startX;
 
-    document.removeEventListener('mouseup', this.onMouseUp);
-    document.removeEventListener('mousemove', this.onMouseMove);
+        if (Math.abs(delta) < this.swipeStep) {
+            this.setPosition(marginLeft + delta);
+        }
+        else {
+            this.onMouseUp();
+        }
+    };
 
-    this.timeout = setTimeout(function() {
+    Swipeable.prototype._onMouseUp = function () {
+        if (Math.abs(delta) > this.swipeStep / 3) {
+            this._setTransition(this.animationDelay, this.animationDuration);
+            marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
+        }
+
+        if (marginLeft > 0) {
+            marginLeft = 0;
+        }
+        else if (marginLeft <= -this.el.offsetWidth) {
+            marginLeft = -this.el.offsetWidth + this.swipeStep;
+        }
+
+        this.setPosition(marginLeft);
+
+        document.removeEventListener('mouseup', this.onMouseUp);
+        document.removeEventListener('mousemove', this.onMouseMove);
+
+        timeout = setTimeout(function() {
+            this._setTransition(0, 0);
+        }.bind(this), this.animationDelay + this.animationDuration);
+    };
+
+    Swipeable.prototype._onMouseDown = function (e) {
+        clearTimeout(timeout);
         this._setTransition(0, 0);
-    }.bind(this), this.animationDelay + this.animationDuration);
-};
 
-Swipeable.prototype._onMouseDown = function (e) {
-    clearTimeout(this.timeout);
-    this._setTransition(0, 0);
+        startX = e.clientX;
 
-    this.startX = e.clientX;
+        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener('mousemove', this.onMouseMove);
+    };
 
-    document.addEventListener('mouseup', this.onMouseUp);
-    document.addEventListener('mousemove', this.onMouseMove);
-};
+    Swipeable.prototype.init = function () {
+        this.el.addEventListener('mousedown', this.onMouseDown);
+    };
 
-Swipeable.prototype.init = function () {
-    this.el.addEventListener('mousedown', this.onMouseDown);
-};
+    return Swipeable;
+}();
