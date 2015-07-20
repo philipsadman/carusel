@@ -23,9 +23,15 @@ html, body {
 }
 .photo-wrap:before {
     transform: rotate(8deg);
+    -webkit-transform: rotate(8deg);
+    -moz-transform: rotate(8deg);
+    -ms-transform: rotate(-8deg);
 }
 .photo-wrap:after {
     transform: rotate(-8deg);
+    -webkit-transform: rotate(-8deg);
+    -moz-transform: rotate(-8deg);
+    -ms-transform: rotate(-8deg);
 }
 
 .carusel-wrapper {
@@ -41,8 +47,11 @@ html, body {
     box-shadow: 0 0 10px 5px rgba(0,0,0,.2);
 
     z-index: 0;
-    -webkit-touch-callout: none;
+
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
 }
 
 .carusel-wrapper:before, .carusel-wrapper:after {
@@ -74,9 +83,7 @@ html, body {
     list-style: none;
     white-space: nowrap;
 
-    transition-delay: 0;
     transition-property: margin-left;
-    transition-duration: 0;
     transition-timing-function: linear;
 }
 
