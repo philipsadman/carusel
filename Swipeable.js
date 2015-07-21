@@ -28,13 +28,13 @@ var Swipeable = function () {
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
             this.trigger('swipeSuccess', marginLeft);
         }
-        else {
-            if (marginLeft > 0) {
-                marginLeft = 0;
-            }
-            else if (marginLeft <= -this.el.offsetWidth) {
-                marginLeft = -this.el.offsetWidth + this.swipeStep;
-            }
+
+        if (marginLeft > 0) {
+            marginLeft = 0;
+            this.trigger('swipeFail', marginLeft);
+        }
+        else if (marginLeft <= -this.el.offsetWidth) {
+            marginLeft = -this.el.offsetWidth + this.swipeStep;
             this.trigger('swipeFail', marginLeft);
         }
 
