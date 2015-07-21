@@ -15,11 +15,18 @@ var Carusel = function () {
 
         this.init();
 
-        this.on('swipeStart', function (marginLeft) {
+        this.on('swipeStart', function () {
+            clearTimeout(timeout);
             this._setTransition(0, 0);
         }.bind(this));
 
         this.on('swipe', handleSwipeFinish.bind(this));
+
+        this.on('swipeEnd', function () {
+            timeout = setTimeout(function() {
+                this._setTransition(0, 0);
+            }.bind(this), this.animationDelay + this.animationDuration);
+        });
 
         function handleSwipeFinish (marginLeft) {
             this._setTransition(this.animationDelay, this.animationDuration);
@@ -28,15 +35,6 @@ var Carusel = function () {
     }
 
     Carusel.prototype._setTransition = function (delay, duration) {
-        if (duration > 0) {
-            timeout = setTimeout(function() {
-                this._setTransition(0, 0);
-            }.bind(this), this.animationDelay + this.animationDuration);
-        }
-        else {
-            clearTimeout(timeout);
-        }
-
         this.el.style.webkitTransitionDelay = delay + 'ms';
         this.el.style.webkitTransitionDuration = duration + 'ms';
     };
