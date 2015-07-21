@@ -12,11 +12,6 @@ var Swipeable = function () {
         this.el.style.marginLeft = val + 'px';
     };
 
-    Swipeable.prototype._setTransition = function (delay, duration) {
-        this.el.style.webkitTransitionDelay = delay + 'ms';
-        this.el.style.webkitTransitionDuration = duration + 'ms';
-    };
-
     Swipeable.prototype._onMouseMove = function (e) {
         delta = e.clientX - startX;
 
@@ -30,8 +25,6 @@ var Swipeable = function () {
     };
 
     Swipeable.prototype._onMouseUp = function () {
-        this._setTransition(this.animationDelay, this.animationDuration);
-
         if (Math.abs(delta) > this.swipeStep / 2) {
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
             this.trigger('swipeSuccess', marginLeft);
@@ -51,15 +44,11 @@ var Swipeable = function () {
 
         document.removeEventListener('mouseup', this.onMouseUp);
         document.removeEventListener('mousemove', this.onMouseMove);
-
-        timeout = setTimeout(function() {
-            this._setTransition(0, 0);
-        }.bind(this), this.animationDelay + this.animationDuration);
     };
 
     Swipeable.prototype._onMouseDown = function (e) {
+        this.trigger('swipeStart');
         clearTimeout(timeout);
-        this._setTransition(0, 0);
 
         startX = e.clientX;
 
