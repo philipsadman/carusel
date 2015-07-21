@@ -1,4 +1,6 @@
 var Swipeable = function () {
+    extend(Swipeable, EventEmitter);
+
     var startX = 0,
         delta = 0,
         marginLeft = 0,
@@ -8,7 +10,7 @@ var Swipeable = function () {
 
     Swipeable.prototype.setPosition = function (val) {
         this.el.style.marginLeft = val + 'px';
-    }
+    };
 
     Swipeable.prototype._setTransition = function (delay, duration) {
         this.el.style.webkitTransitionDelay = delay + 'ms';
@@ -18,6 +20,7 @@ var Swipeable = function () {
     Swipeable.prototype._onMouseMove = function (e) {
         delta = e.clientX - startX;
 
+        // Move item until mouseup event would not fire or until the end of border of next item
         if (Math.abs(delta) < this.swipeStep) {
             this.setPosition(marginLeft + delta);
         }
@@ -31,6 +34,10 @@ var Swipeable = function () {
 
         if (Math.abs(delta) > this.swipeStep / 2) {
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
+            this.trigger('swipeSuccess', marginLeft);
+        }
+        else {
+            this.trigger('swipeFail');
         }
 
         if (marginLeft > 0) {

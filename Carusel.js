@@ -12,6 +12,14 @@ var Carusel = function () {
         this.swipeStep = this.el.querySelector('.carusel-item').offsetWidth + 20;
 
         this.init();
+
+        this.on('swipeSuccess', function (marginLeft) {
+            this.setPosition(marginLeft);
+        }.bind(this));
+
+        this.on('swipeFail', function () {
+            console.log('fail');
+        });
     }
 
     return Carusel;
