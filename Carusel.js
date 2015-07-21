@@ -20,24 +20,28 @@ var Carusel = function () {
         }.bind(this));
 
         this.on('swipeSuccess', function (marginLeft) {
-            this.setPosition(marginLeft);
             this._setTransition(this.animationDelay, this.animationDuration);
+            this.setPosition(marginLeft);
         }.bind(this));
 
-        this.on('swipeFail', function () {
+        this.on('swipeFail', function (marginLeft) {
             this._setTransition(this.animationDelay, this.animationDuration);
+            this.setPosition(marginLeft);
         }.bind(this));
     }
 
     Carusel.prototype._setTransition = function (delay, duration) {
-        this.el.style.webkitTransitionDelay = delay + 'ms';
-        this.el.style.webkitTransitionDuration = duration + 'ms';
-
         if (duration > 0) {
             timeout = setTimeout(function() {
                 this._setTransition(0, 0);
             }.bind(this), this.animationDelay + this.animationDuration);
         }
+        else {
+            clearTimeout(timeout);
+        }
+
+        this.el.style.webkitTransitionDelay = delay + 'ms';
+        this.el.style.webkitTransitionDuration = duration + 'ms';
     };
 
     return Carusel;

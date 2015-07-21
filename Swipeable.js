@@ -3,8 +3,7 @@ var Swipeable = function () {
 
     var startX = 0,
         delta = 0,
-        marginLeft = 0,
-        timeout = null;
+        marginLeft = 0;
 
     function Swipeable () {}
 
@@ -30,17 +29,14 @@ var Swipeable = function () {
             this.trigger('swipeSuccess', marginLeft);
         }
         else {
-            this.trigger('swipeFail');
+            if (marginLeft > 0) {
+                marginLeft = 0;
+            }
+            else if (marginLeft <= -this.el.offsetWidth) {
+                marginLeft = -this.el.offsetWidth + this.swipeStep;
+            }
+            this.trigger('swipeFail', marginLeft);
         }
-
-        if (marginLeft > 0) {
-            marginLeft = 0;
-        }
-        else if (marginLeft <= -this.el.offsetWidth) {
-            marginLeft = -this.el.offsetWidth + this.swipeStep;
-        }
-
-        this.setPosition(marginLeft);
 
         document.removeEventListener('mouseup', this.onMouseUp);
         document.removeEventListener('mousemove', this.onMouseMove);
@@ -48,7 +44,6 @@ var Swipeable = function () {
 
     Swipeable.prototype._onMouseDown = function (e) {
         this.trigger('swipeStart');
-        clearTimeout(timeout);
 
         startX = e.clientX;
 
