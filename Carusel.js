@@ -19,9 +19,7 @@ var Carusel = function () {
             this._setTransition(0, 0);
         }.bind(this));
 
-        this.on('swipeSuccess', handleSwipeFinish.bind(this));
-
-        this.on('swipeFail', handleSwipeFinish.bind(this));
+        this.on('swipe', handleSwipeFinish.bind(this));
 
         function handleSwipeFinish (marginLeft) {
             this._setTransition(this.animationDelay, this.animationDuration);
@@ -31,13 +29,11 @@ var Carusel = function () {
 
     Carusel.prototype._setTransition = function (delay, duration) {
         if (duration > 0) {
-            console.log(1)
             timeout = setTimeout(function() {
                 this._setTransition(0, 0);
             }.bind(this), this.animationDelay + this.animationDuration);
         }
         else {
-            console.log(2)
             clearTimeout(timeout);
         }
 

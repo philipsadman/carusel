@@ -24,25 +24,21 @@ var Swipeable = function () {
     };
 
     Swipeable.prototype._onMouseUp = function () {
+        document.removeEventListener('mouseup', this.onMouseUp);
+        document.removeEventListener('mousemove', this.onMouseMove);
+
         if (Math.abs(delta) > this.swipeStep / 2) {
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
-            this.trigger('swipeSuccess', marginLeft);
-        }
-        else {
-            this.trigger('swipeFail', marginLeft);
         }
 
         if (marginLeft > 0) {
             marginLeft = 0;
-            this.trigger('swipeFail', marginLeft);
         }
         else if (marginLeft <= -this.el.offsetWidth) {
             marginLeft = -this.el.offsetWidth + this.swipeStep;
-            this.trigger('swipeFail', marginLeft);
         }
 
-        document.removeEventListener('mouseup', this.onMouseUp);
-        document.removeEventListener('mousemove', this.onMouseMove);
+        this.trigger('swipe', marginLeft);
     };
 
     Swipeable.prototype._onMouseDown = function (e) {
