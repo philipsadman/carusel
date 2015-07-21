@@ -28,6 +28,9 @@ var Swipeable = function () {
             marginLeft += delta > 0 ? this.swipeStep : -this.swipeStep;
             this.trigger('swipeSuccess', marginLeft);
         }
+        else {
+            this.trigger('swipeFail', marginLeft);
+        }
 
         if (marginLeft > 0) {
             marginLeft = 0;
