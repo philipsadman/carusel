@@ -22,12 +22,6 @@ var Carusel = function () {
 
         this.on('swipe', handleSwipeFinish.bind(this));
 
-        this.on('swipeEnd', function () {
-            timeout = setTimeout(function() {
-                this._setTransition(0, 0);
-            }.bind(this), this.animationDelay + this.animationDuration);
-        });
-
         function handleSwipeFinish (marginLeft) {
             this._setTransition(this.animationDelay, this.animationDuration);
             this.setPosition(marginLeft);
