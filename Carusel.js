@@ -19,15 +19,14 @@ var Carusel = function () {
             this._setTransition(0, 0);
         }.bind(this));
 
-        this.on('swipeSuccess', function (marginLeft) {
-            this._setTransition(this.animationDelay, this.animationDuration);
-            this.setPosition(marginLeft);
-        }.bind(this));
+        this.on('swipeSuccess', handleSwipeFinish.bind(this));
 
-        this.on('swipeFail', function (marginLeft) {
+        this.on('swipeFail', handleSwipeFinish.bind(this));
+
+        function handleSwipeFinish (marginLeft) {
             this._setTransition(this.animationDelay, this.animationDuration);
             this.setPosition(marginLeft);
-        }.bind(this));
+        }
     }
 
     Carusel.prototype._setTransition = function (delay, duration) {
